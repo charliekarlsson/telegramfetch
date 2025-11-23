@@ -1,0 +1,9 @@
+{
+  "name": "telegramfetch",
+  "private": true,
+  "scripts": {
+    "postinstall": "cd telegrambot && npm install",
+    "start": "cd telegrambot && npm start",
+    "dev": "cd telegrambot && npm run dev"
+  }
+}
