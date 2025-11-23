@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const path = require('path');
@@ -15,6 +16,11 @@ if (!TELEGRAM_TOKEN) {
 }
 
 const app = express();
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'OPTIONS'],
+}));
+app.options('*', cors());
 const downloadsDir = path.join(__dirname, 'downloads');
 const gallery = [];
 
@@ -97,12 +103,6 @@ bot.on('channel_post', (channelPost) => {
   handlePhotoContainer(channelPost, 'channel-post').catch((error) => {
     console.error('Failed to process channel photo', error);
   });
-});
-
-app.use((_, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  next();
 });
 
 app.get('/gallery/latest', (req, res) => {
