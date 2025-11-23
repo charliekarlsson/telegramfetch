@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Monko | The Chillest Memecoin</title>
+	<style>
+		@font-face {
+			font-family: 'Jungle Zone';
+			src: url('Jungle Zone/Web Fonts/e88e441ff50f35e2538b314c7224c079.woff2') format('woff2'),
+				url('Jungle Zone/Web Fonts/e88e441ff50f35e2538b314c7224c079.woff') format('woff'),
+				url('Jungle Zone/Web Fonts/e88e441ff50f35e2538b314c7224c079.ttf') format('truetype');
+			font-weight: 900;
+			font-style: normal;
+			font-display: swap;
+		}
+
+		:root {
+			color-scheme: dark;
+			--accent: #ff8f3f;
+			--accent-soft: rgba(255, 143, 63, 0.15);
+			--dimmer-opacity: 0;
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: "Space Grotesk", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			min-height: 100vh;
+			color: #fdfcf9;
+			background-color: #050505;
+			overflow-x: hidden;
+		}
+
+		body.scrolled {
+			--dimmer-opacity: 0.4;
+		}
+
+		.bg-loop {
+			position: fixed;
+			inset: 0;
+			background-image: url("landingbg1.png");
+			background-repeat: repeat-x;
+			background-size: cover;
+			background-position: 0 50%;
+			animation: drift 40s linear infinite;
+			transform: scale(1.1);
+			filter: brightness(1.08) contrast(1.02) saturate(1.1);
+			z-index: 0;
+			will-change: background-position;
+			transition: filter 1.2s ease;
+		}
+
+		body.scrolled .bg-loop {
+			filter: brightness(0.766) contrast(0.973) saturate(0.91);
+		}
+
+		.bg-loop::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: radial-gradient(circle at 20% 20%, rgba(5, 5, 5, 0.05), rgba(5, 5, 5, 0.35));
+		}
+
+		.bg-dimmer {
+			position: fixed;
+			inset: 0;
+			background: rgba(5, 5, 5, 0.4);
+			backdrop-filter: blur(5.5px);
+			opacity: var(--dimmer-opacity);
+			transition: opacity 1.2s ease, backdrop-filter 1.2s ease, background 1.2s ease;
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		body.scrolled .bg-dimmer {
+			backdrop-filter: blur(10.8px);
+		}
+
+		.contract-banner {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 1rem clamp(1.5rem, 5vw, 4rem);
+			gap: 1.25rem;
+			font-family: "Space Grotesk", "Inter", sans-serif;
+			font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: #f7a204;
+			z-index: 2;
+		}
+
+		.contract-banner .value {
+			font-family: "Space Grotesk", "IBM Plex Mono", monospace;
+			font-weight: 700;
+			color: #f7a204;
+			letter-spacing: 0.12em;
+			text-align: center;
+			word-break: break-all;
+			white-space: normal;
+			text-shadow:
+				1px 1px 0 rgba(0, 0, 0, 0.55),
+				0 6px 18px rgba(0, 0, 0, 0.6);
+		}
+
+		.contract-banner .value-spacer {
+			visibility: hidden;
+		}
+
+		.contract-icons {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+		}
+
+		.contract-icons a {
+			width: 55px;
+			height: 55px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			transition: transform 150ms ease, opacity 150ms ease;
+		}
+
+		.contract-icons a:hover {
+			transform: translateY(-2px);
+			opacity: 0.85;
+		}
+
+		.contract-icons img,
+		.contract-icons svg {
+			width: 28px;
+			height: 28px;
+			fill: #fff9ea;
+		}
+
+		@media (max-width: 640px) {
+			.contract-banner {
+				flex-direction: column;
+				gap: 0.75rem;
+				text-align: center;
+			}
+
+			.contract-banner .value,
+			.contract-banner .value-spacer {
+				letter-spacing: 0.065em;
+				font-size: clamp(0.78rem, 3.6vw, 0.95rem);
+			}
+
+			.contract-icons {
+				gap: 0.5rem;
+			}
+
+			.contract-icons a {
+				width: 44px;
+				height: 44px;
+			}
+
+			.contract-icons img,
+			.contract-icons svg {
+				width: 24px;
+				height: 24px;
+			}
+		}
+
+		main {
+			position: relative;
+			z-index: 1;
+		}
+
+		.hero {
+			position: relative;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem);
+			pointer-events: none;
+		}
+
+		.logo-overlay {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			pointer-events: none;
+			text-align: center;
+		}
+
+		.logo-stack {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 0;
+			width: min(58vw, 520px);
+			max-width: 90vw;
+		}
+
+		.logo-stack img {
+			width: 80%;
+			max-width: 100%;
+			animation: wobble 7s ease-in-out infinite;
+			transform-origin: center;
+			filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.35));
+		}
+
+		.logo-wordmark {
+			font-family: "Jungle Zone", "TT Squares Condensed", "Space Grotesk", sans-serif;
+			font-weight: 900;
+			font-size: clamp(2.025rem, 9.9vw, 108px);
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			line-height: 0.9;
+			margin-top: clamp(-1rem, -2vw, -0.45rem);
+			padding-top: clamp(0.05rem, 0.4vw, 0.3rem);
+			display: inline-block;
+			color: #f7a204;
+			-webkit-text-fill-color: #f7a204;
+			-webkit-text-stroke: clamp(1.6px, 0.6vw, 5px) rgba(0, 0, 0, 0.92);
+			paint-order: stroke fill;
+			text-shadow:
+				2px 2px 0 rgba(255, 255, 255, 0.65),
+				0 10px 28px rgba(0, 0, 0, 0.55);
+		}
+
+
+		.info-section {
+			position: relative;
+			padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem);
+			color: #f7ffef;
+			box-shadow: none;
+			background: transparent;
+		}
+
+		.info-content {
+			max-width: 960px;
+			margin: 0 auto;
+			text-align: center;
+		}
+
+		.info-content h2 {
+			font-family: "Jungle Zone", "Space Grotesk", sans-serif;
+			font-weight: 900;
+			font-size: clamp(2.4rem, 5vw, 3.6rem);
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+			color: #f7a204;
+			-webkit-text-stroke: clamp(0.5px, 0.25vw, 1.6px) rgba(0, 0, 0, 0.95);
+			paint-order: stroke fill;
+			text-shadow:
+				2px 2px 0 rgba(255, 255, 255, 0.65),
+				0 10px 24px rgba(0, 0, 0, 0.45);
+		}
+
+		.info-content p.lede {
+			margin-top: 1rem;
+			font-size: clamp(1rem, 2vw, 1.3rem);
+			color: rgba(247, 255, 239, 0.85);
+		}
+
+		.info-grid {
+			margin-top: clamp(2rem, 6vw, 3.5rem);
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: clamp(1rem, 4vw, 2rem);
+		}
+
+		.info-card {
+			background: rgba(7, 30, 3, 0.65);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			border-radius: 1rem;
+			padding: 1.5rem;
+			text-align: left;
+			box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35);
+			backdrop-filter: blur(6px);
+		}
+
+		.info-card h3 {
+			font-size: 1.1rem;
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+			margin-bottom: 0.5rem;
+			color: #fdd26b;
+		}
+
+		.info-card p {
+			color: rgba(247, 255, 239, 0.8);
+			line-height: 1.5;
+		}
+
+		.info-actions {
+			margin-top: clamp(2.75rem, 7vw, 4.5rem);
+			display: flex;
+			justify-content: center;
+		}
+
+		.gallery-section {
+			padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem);
+			color: #f7ffef;
+			text-align: center;
+		}
+
+		.gallery-header {
+			max-width: 760px;
+			margin: 0 auto clamp(2rem, 5vw, 3rem);
+		}
+
+		.gallery-header h2 {
+			font-family: "Jungle Zone", "Space Grotesk", sans-serif;
+			font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+			color: #f7a204;
+			margin-bottom: 0.75rem;
+			-webkit-text-stroke: clamp(0.5px, 0.25vw, 1.6px) rgba(0, 0, 0, 0.95);
+			text-shadow:
+				2px 2px 0 rgba(255, 255, 255, 0.55),
+				0 10px 24px rgba(0, 0, 0, 0.45);
+		}
+
+		.gallery-header p {
+			color: rgba(247, 255, 239, 0.82);
+			font-size: clamp(1rem, 1.6vw, 1.2rem);
+		}
+
+		.gallery-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+			gap: clamp(1rem, 2vw, 1.5rem);
+			width: 100%;
+			margin: 0 auto;
+			max-width: 1200px;
+		}
+
+		@media (min-width: 900px) {
+			.gallery-grid {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+			}
+		}
+
+		.gallery-item {
+			background: rgba(7, 30, 3, 0.75);
+			border-radius: 1rem;
+			overflow: hidden;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			box-shadow: 0 18px 30px rgba(0, 0, 0, 0.4);
+			backdrop-filter: blur(6px);
+			position: relative;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.gallery-item img {
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			display: block;
+			flex-shrink: 0;
+		}
+
+		.gallery-item figcaption {
+			padding: 0.85rem 1rem 1.2rem;
+			text-align: left;
+			flex: 1;
+		}
+
+		.gallery-item .meta {
+			font-size: 0.85rem;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			color: rgba(247, 255, 239, 0.65);
+			margin-bottom: 0.35rem;
+		}
+
+		.gallery-item .caption {
+			color: rgba(247, 255, 239, 0.92);
+			font-size: 0.95rem;
+			line-height: 1.4;
+		}
+
+		.gallery-status {
+			margin-top: clamp(1.5rem, 4vw, 2.75rem);
+			font-size: 0.95rem;
+			color: rgba(247, 255, 239, 0.72);
+		}
+
+		.gallery-cta {
+			margin-top: clamp(1rem, 3vw, 2rem);
+			display: inline-flex;
+			align-items: center;
+			gap: 0.65rem;
+			padding: 0.75rem 1.25rem;
+			border-radius: 999px;
+			background: rgba(10, 40, 6, 0.92);
+			border: 1px solid rgba(247, 162, 4, 0.55);
+			color: #fdd26b;
+			font-weight: 600;
+			text-decoration: none;
+			box-shadow: 0 12px 22px rgba(0, 0, 0, 0.35);
+			transition: transform 150ms ease, box-shadow 150ms ease;
+		}
+
+		.gallery-cta:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 18px 28px rgba(247, 162, 4, 0.25);
+		}
+
+		.site-footer {
+			padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 4vw, 3rem);
+			text-align: center;
+			color: rgba(247, 255, 239, 0.9);
+			background: linear-gradient(180deg, rgba(5, 5, 5, 0) 0%, rgba(5, 5, 5, 0.7) 45%, rgba(5, 5, 5, 0.9) 100%);
+			border-top: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.footer-links {
+			display: inline-flex;
+			flex-wrap: wrap;
+			gap: 1.25rem;
+			align-items: center;
+			justify-content: center;
+			margin-top: 1rem;
+		}
+
+		.footer-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			color: #f7ffef;
+			text-decoration: none;
+			font-weight: 600;
+			letter-spacing: 0.05em;
+			text-transform: uppercase;
+			font-size: 0.85rem;
+			transition: opacity 150ms ease, transform 150ms ease;
+			padding: 0.65rem 0.9rem;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.07);
+			border: 1px solid rgba(247, 162, 4, 0.35);
+		}
+
+		.footer-link:hover {
+			opacity: 0.8;
+			transform: translateY(-1px);
+		}
+
+		.footer-link svg,
+		.footer-link img {
+			width: 48px;
+			height: 48px;
+		}
+
+		.footer-link svg {
+			fill: #fff9ea;
+		}
+
+		.footer-link img {
+			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.35));
+		}
+
+		.buy-link {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			max-width: 260px;
+		}
+
+		.buy-link img {
+			width: 100%;
+			height: auto;
+			display: block;
+			filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.45));
+			transition: transform 200ms ease, filter 200ms ease;
+		}
+
+		.buy-link img:hover {
+			transform: translateY(-3px);
+			filter: drop-shadow(0 18px 30px rgba(247, 162, 4, 0.35));
+		}
+
+		@keyframes drift {
+			from {
+				background-position: 0 50%;
+			}
+
+			to {
+				background-position: -2000px 50%;
+			}
+		}
+
+		@keyframes wobble {
+			0% {
+				transform: rotate(-1deg);
+			}
+
+			50% {
+				transform: rotate(1deg);
+			}
+
+			100% {
+				transform: rotate(-1deg);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="bg-loop" aria-hidden="true"></div>
+	<div class="bg-dimmer" aria-hidden="true"></div>
+	<header class="contract-banner" aria-label="Monko contract address">
+		<span aria-hidden="true" class="value value-spacer">&nbsp;</span>
+		<span class="value">EMvFZGZAakJk1AByP162Bu2ENiGxV8EXqYx2XKV3doge</span>
+		<div class="contract-icons" role="navigation" aria-label="Monko links">
+			<a href="https://anoncoin.it/monko" target="_blank" rel="noreferrer noopener" aria-label="Anoncoin listing">
+				<img src="anoncoin.png" alt="Anoncoin icon" />
+			</a>
+			<a href="https://t.me/MonkoTG" target="_blank" rel="noreferrer noopener" aria-label="Monko on Telegram">
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+					<path d="M9.442 15.568l-.384 5.419c.548 0 .786-.235 1.07-.517l2.568-2.461 5.328 3.871c.976.538 1.667.255 1.932-.903l3.498-16.386h.001c.314-1.466-.531-2.038-1.492-1.68L1.19 10.623c-1.445.563-1.423 1.37-.246 1.736l5.366 1.688L19.364 5.69c.632-.414 1.209-.185.737.229z" />
+				</svg>
+			</a>
+			<a href="https://x.com/i/communities/1981038130007257396" target="_blank" rel="noreferrer noopener" aria-label="Monko on X">
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+					<path d="M18.244 2.25h3.308l-7.228 8.26 8.502 11.24h-6.654l-5.217-6.828-5.973 6.828H1.673l7.72-8.808L1.19 2.25h6.78l4.713 6.179z" />
+				</svg>
+			</a>
+		</div>
+	</header>
+	<main>
+		<section class="hero" aria-label="Monko hero">
+			<div class="logo-overlay">
+				<div class="logo-stack">
+					<img src="monkoring4.png" alt="Monko ring logo" />
+					<span class="logo-wordmark">$Monko</span>
+				</div>
+			</div>
+		</section>
+		<section class="info-section" aria-labelledby="monko-story">
+			<div class="info-content">
+				<h2 id="monko-story">Welcome to the Monkosphere</h2>
+				<p class="lede">Powered by monkeys and jungle energy, Monko is the community coin that rewards the troop.</p>
+				<div class="info-grid">
+					<article class="info-card">
+						<h3>Banana Stash</h3>
+						<p>Each trade ripens the treasury, bankrolling art drops, jungle quests, and the wildest meme raids we can dream up.</p>
+					</article>
+					<article class="info-card">
+						<h3>Monko + Doge = true</h3>
+						<p>Monkeys and dogs, who knew they’d vibe this hard? Monko is a Dogechain native coin.</p>
+					</article>
+					<article class="info-card">
+						<h3>Monko Game</h3>
+						<p>Coming soon!</p>
+					</article>
+				</div>
+				<div class="info-actions">
+					<a class="buy-link" href="https://anoncoin.it/monko" target="_blank" rel="noreferrer noopener" aria-label="Buy Monko on Anoncoin">
+						<img src="buy.png" alt="Buy Monko" />
+					</a>
+				</div>
+			</div>
+		</section>
+		<section class="gallery-section" aria-labelledby="gallery-title" data-gallery-endpoint="http://localhost:4000/gallery/latest">
+			<div class="gallery-header">
+				<h2 id="gallery-title">Monko Signal Feed</h2>
+				<p>These shots beam straight from the troop’s Telegram drops. Keep sharing your jungle finds to watch this wall evolve.</p>
+			</div>
+			<div class="gallery-grid" role="list"></div>
+			<p class="gallery-status" aria-live="polite">Waiting for new jungle dispatches…</p>
+			<a class="gallery-cta" href="https://t.me/MonkoMemes" target="_blank" rel="noopener noreferrer">See the full feed on Telegram</a>
+		</section>
+	</main>
+	<footer class="site-footer" aria-label="Monko links">
+		<p>Join the troop everywhere we hang out.</p>
+		<div class="footer-links">
+			<a class="footer-link" href="https://anoncoin.it/monko" target="_blank" rel="noopener noreferrer">
+				<img src="anoncoin.png" alt="Anoncoin" />
+				<span>Anoncoin</span>
+			</a>
+			<a class="footer-link" href="https://t.me/MonkoTG" target="_blank" rel="noopener noreferrer" aria-label="Monko on Telegram">
+				<img src="telegram-footer.svg" alt="Telegram" />
+				<span>Telegram</span>
+			</a>
+			<a class="footer-link" href="https://x.com/i/communities/1981038130007257396" target="_blank" rel="noopener noreferrer" aria-label="Monko on X">
+				<img src="x-footer.svg" alt="X" />
+				<span>X</span>
+			</a>
+		</div>
+	</footer>
+
+	<script>
+		(() => {
+			const body = document.body;
+			const threshold = 120;
+			let ticking = false;
+
+			const update = () => {
+				const shouldDim = window.scrollY > threshold;
+				body.classList.toggle('scrolled', shouldDim);
+				ticking = false;
+			};
+
+			window.addEventListener('scroll', () => {
+				if (!ticking) {
+					ticking = true;
+					requestAnimationFrame(update);
+				}
+			}, { passive: true });
+
+			update();
+		})();
+
+		(() => {
+			const section = document.querySelector('[data-gallery-endpoint]');
+			if (!section) return;
+
+			const grid = section.querySelector('.gallery-grid');
+			const statusEl = section.querySelector('.gallery-status');
+			const defaultEndpoint = section.dataset.galleryEndpoint?.trim() || '/gallery/latest';
+			const endpoint = window.MONKO_GALLERY_API || defaultEndpoint;
+			const endpointUrl = new URL(endpoint, window.location.href);
+			const mediaBase = window.MONKO_GALLERY_MEDIA_BASE || endpointUrl.origin;
+			const refreshMs = 30_000;
+			const timeFormatter = new Intl.DateTimeFormat(undefined, {
+				dateStyle: 'medium',
+				timeStyle: 'short'
+			});
+			let loading = false;
+
+			const setStatus = (message) => {
+				if (statusEl) {
+					statusEl.textContent = message;
+				}
+			};
+
+			const resolveMediaUrl = (path) => {
+				try {
+					return new URL(path, mediaBase).href;
+				} catch {
+					return path;
+				}
+			};
+
+			const renderItems = (items) => {
+				const limitedItems = items.slice(0, 6);
+				if (!items.length) {
+					grid.replaceChildren();
+					setStatus('No jungle pics yet — drop one in Telegram to kick things off.');
+					return;
+				}
+
+				const fragment = document.createDocumentFragment();
+				limitedItems.forEach((item) => {
+					const figure = document.createElement('figure');
+					figure.className = 'gallery-item';
+
+					const image = document.createElement('img');
+					image.loading = 'lazy';
+					image.decoding = 'async';
+					image.alt = item.caption ? `Monko community upload: ${item.caption}` : 'Monko community upload';
+					image.src = resolveMediaUrl(item.url);
+
+					const figcaption = document.createElement('figcaption');
+					const meta = document.createElement('p');
+					meta.className = 'meta';
+					const author = item.from || 'anon troop';
+					const postedAt = item.postedAt ? timeFormatter.format(new Date(item.postedAt)) : 'just now';
+					meta.textContent = `@${author} • ${postedAt}`;
+
+					const caption = document.createElement('p');
+					caption.className = 'caption';
+					caption.textContent = item.caption || 'No caption — just vibes.';
+
+					figcaption.append(meta, caption);
+					figure.append(image, figcaption);
+					fragment.appendChild(figure);
+				});
+
+				grid.replaceChildren(fragment);
+				setStatus(`Updated ${timeFormatter.format(new Date())}`);
+			};
+
+			const fetchGallery = async (initial = false) => {
+				if (loading) return;
+				loading = true;
+				if (initial) {
+					setStatus('Syncing with the troop feed…');
+				}
+				try {
+					const response = await fetch(endpoint, { cache: 'no-store' });
+					if (!response.ok) throw new Error(`Gallery fetch failed (${response.status})`);
+					const payload = await response.json();
+					renderItems(Array.isArray(payload) ? payload : []);
+				} catch (error) {
+					console.error('Failed to refresh gallery', error);
+					setStatus('Gallery signal is weak — retrying shortly.');
+				} finally {
+					loading = false;
+				}
+			};
+
+			fetchGallery(true);
+			setInterval(fetchGallery, refreshMs);
+		})();
+	</script>
+</body>
+
+</html>

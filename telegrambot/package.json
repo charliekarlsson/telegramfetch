@@ -1,0 +1,27 @@
+{
+  "name": "monko-telegram-gallery-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot + API that streams group photos into the Monko gallery feed.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "gallery",
+    "monko"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "node-telegram-bot-api": "^0.63.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
