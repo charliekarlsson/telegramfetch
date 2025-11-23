@@ -19,3 +19,20 @@ Single-page experience for the $MONKO memecoin with a drifting parallax hero, a 
 - All styles still live inside `index.html`; split into separate CSS if the project expands.
 - Background drift uses a CSS keyframe again; a tiny script simply toggles a class on scroll so the `bg-dimmer` overlay fades in (20% darker + blur) when the page is not at the very top.
 - Adjust the second section’s cards or colors by editing the `.info-section`, `.info-grid`, and `.info-card` rules.
+
+## Deploying with Cloudflare Wrangler
+1. Install dependencies (this also installs the Telegram bot package under the hood):
+	```powershell
+	npm install
+	```
+2. Authenticate Wrangler with your Cloudflare account:
+	```powershell
+	npx wrangler login
+	```
+3. Deploy the static site to Cloudflare Pages:
+	```powershell
+	npm run cf:deploy -- --project-name <your-pages-project>
+	```
+	Replace `<your-pages-project>` with the actual Pages project slug; Wrangler will upload the current directory contents.
+
+> Wrangler is installed locally as a dev dependency (see `package.json`), so teammates and CI pipelines use the exact same CLI version.

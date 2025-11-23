@@ -4,6 +4,10 @@
   "scripts": {
     "postinstall": "cd telegrambot && npm install",
     "start": "cd telegrambot && npm start",
-    "dev": "cd telegrambot && npm run dev"
+    "dev": "cd telegrambot && npm run dev",
+    "cf:deploy": "wrangler pages deploy ."
+  },
+  "devDependencies": {
+    "wrangler": "^4.50.0"
   }
 }
